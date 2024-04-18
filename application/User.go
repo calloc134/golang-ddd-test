@@ -5,16 +5,25 @@ import (
 )
 
 // UserAggregate is a struct that represents the User aggregate
-type IUserAggregate interface {
+type IUserRepository interface {
 	FindAll() ([]domain.UserAggregate, error)
 	FindByID(id int) (domain.UserAggregate, error)
 	Save(user domain.UserAggregate) error
 }
 
 type UserApplication struct {
-	UserAggregate domain.UserAggregate
+	UserRepository IUserRepository
 }
 
-func NewUserApplication(userAggregate domain.UserAggregate) UserApplication {
-	return UserApplication{UserAggregate: userAggregate}
+func NewUserApplication(userRepository IUserRepository) UserApplication {
+	return UserApplication{UserRepository: userRepository}
 }
+
+func (ua *UserApplication) FindAll() ([]domain.UserAggregate, error) {
+	return ua.UserRepository.FindAll()
+}
+
+func (ua *UserApplication) FindByID(id int) (domain.UserAggregate, error) {
+	return ua.UserRepository.FindByID(id)
+}
+
