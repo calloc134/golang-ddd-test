@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/calloc134/golang-ddd-test/cmd/migrate/migrations"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/sqliteshim"
-	"github.com/uptrace/bun/example/migrate/migrations"
 	"github.com/uptrace/bun/extra/bundebug"
 	"github.com/uptrace/bun/migrate"
 
@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-	sqldb, err := sql.Open(sqliteshim.ShimName, "file:test.s3db?cache=shared")
+	sqldb, err := sql.Open(sqliteshim.DriverName(), "file:test.s3db?cache=shared")
 	if err != nil {
 		panic(err)
 	}
@@ -29,6 +29,7 @@ func main() {
 		bundebug.WithEnabled(false),
 		bundebug.FromEnv(""),
 	))
+	
 
 	app := &cli.App{
 		Name: "bun",
