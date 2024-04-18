@@ -6,7 +6,6 @@ require (
 	github.com/uptrace/bun v1.2.1
 	github.com/uptrace/bun/dialect/sqlitedialect v1.2.1
 	github.com/uptrace/bun/driver/sqliteshim v1.2.1
-	github.com/uptrace/bun/example/migrate v0.0.0-20240407104356-b005dc2a9034
 	github.com/uptrace/bun/extra/bundebug v1.2.1
 	github.com/urfave/cli/v2 v2.27.1
 )

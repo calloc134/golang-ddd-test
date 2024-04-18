@@ -39,8 +39,6 @@ github.com/uptrace/bun/dialect/sqlitedialect v1.2.1 h1:IprvkIKUjEjvt4VKpcmLpbMIu
 github.com/uptrace/bun/dialect/sqlitedialect v1.2.1/go.mod h1:mMQf4NUpgY8bnOanxGmxNiHCdALOggS4cZ3v63a9D/o=
 github.com/uptrace/bun/driver/sqliteshim v1.2.1 h1:xBsGsoMIskK7+dhtWIQ4CrO+UTWzC96G3vGzNDkr5aQ=
 github.com/uptrace/bun/driver/sqliteshim v1.2.1/go.mod h1:oJtOPSCDdDHgNw/0jwIGr+V0yUFxQ8NrBwJ3xbp4XOU=
-github.com/uptrace/bun/example/migrate v0.0.0-20240407104356-b005dc2a9034 h1:IKnSSUy2zZg53pOHX7YOH6VUTpQefDDLn2WVg/WW+dE=
-github.com/uptrace/bun/example/migrate v0.0.0-20240407104356-b005dc2a9034/go.mod h1:hsPckJ6RkSlrUmFNDSMuuieqkZhr2QS4JPkWYmVhzkw=
 github.com/uptrace/bun/extra/bundebug v1.2.1 h1:85MYpX3QESYI02YerKxUi1CD9mHuLrc2BXs1eOCtQus=
 github.com/uptrace/bun/extra/bundebug v1.2.1/go.mod h1:sfGKIi0HSGxsTC/sgIHGwpnYduHHYhdMeOIwurgSY+Y=
 github.com/urfave/cli/v2 v2.27.1 h1:8xSQ6szndafKVRmfyeUMxkNUJQMjL1F2zmsZ+qHpfho=
