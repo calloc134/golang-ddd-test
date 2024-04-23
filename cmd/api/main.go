@@ -3,13 +3,11 @@ package main
 import (
 	"context"
 	"database/sql"
-	"fmt"
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/calloc134/golang-ddd-test/application"
 	"github.com/calloc134/golang-ddd-test/repositories"
+	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/sqliteshim"
@@ -34,11 +32,27 @@ func main() {
 
 	application := application.NewUserApplication(repositories.NewUserRepository(db))
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, World!")
+	ec := echo.New()
+
+
+
+	ec.GET("/GetAllUser", func(c echo.Context) error {
+		users, err := application.FindAll(ctx)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+		return c.JSON(http.StatusOK, users)
 	})
 
-	// とりあえずテスト実装
+
+	ec.GET("/GetUserByID", func(c echo.Context) error {
+		users, err := application.FindByID(ctx, "test")
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+		return c.JSON(http.StatusOK, users)
+	})
+
 	// コントローラとしてのフレームワークは後で追加
 
 	// http.HandleFunc("/NewUser", func(w http.ResponseWriter, r *http.Request) {
@@ -47,33 +61,10 @@ func main() {
 	// 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	// 		return
 	// 	}
-	// 	fmt.Fprintf(w, "User created")
+	// 	fmt.Fprintf(w, "User created")http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
 	// })
 
-	http.HandleFunc("/GetAllUser", func(w http.ResponseWriter, r *http.Request) {
-		users, err := application.FindAll(ctx)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		fmt.Fprintf(w, "Users: %v", users)
-	})
 
-	http.HandleFunc("/GetUserByID", func(w http.ResponseWriter, r *http.Request) {
-		users, err := application.FindByID(ctx, "test")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		fmt.Fprintf(w, "User: %v", users)
-	})
-
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	log.Printf("Server listening on port %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	ec.Start(":1323")
 }
