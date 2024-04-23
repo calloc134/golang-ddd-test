@@ -1,9 +1,16 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+	"math/rand"
+	"time"
+
+	"github.com/oklog/ulid/v2"
+)
 
 // UserAggregate is the aggregate root.
 type UserAggregate struct {
+	ULID  string
 	Name string
 	Age  int
 }
@@ -14,7 +21,16 @@ func NewUserAggregate(name string, age int) (*UserAggregate, error) {
 		return nil, ErrEmptyName
 	}
 
+	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
+	ms := ulid.Timestamp(time.Now())
+	ulid, err := ulid.New(ms, entropy)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &UserAggregate{
+		ULID: ulid.String(),
 		Name: name,
 		Age:  age,
 	}, nil
