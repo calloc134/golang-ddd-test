@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/calloc134/golang-ddd-test/application"
-	"github.com/calloc134/golang-ddd-test/repositories"
+	"github.com/calloc134/golang-ddd-test/src/application"
+	"github.com/calloc134/golang-ddd-test/src/repositories"
 	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"

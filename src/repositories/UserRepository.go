@@ -3,9 +3,9 @@ package repositories
 import (
 	"context"
 
-	"github.com/calloc134/golang-ddd-test/application"
 	"github.com/calloc134/golang-ddd-test/cmd/migrate/schemas"
-	"github.com/calloc134/golang-ddd-test/domain"
+	"github.com/calloc134/golang-ddd-test/src/application"
+	"github.com/calloc134/golang-ddd-test/src/domain"
 	"github.com/uptrace/bun"
 )
 
