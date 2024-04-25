@@ -27,7 +27,7 @@ func main() {
 
 	db := bun.NewDB(sqldb, sqlitedialect.New())
 	db.AddQueryHook(bundebug.NewQueryHook(
-		bundebug.WithEnabled(false),
+		bundebug.WithEnabled(true),
 		bundebug.FromEnv(""),
 	))
 
@@ -36,10 +36,6 @@ func main() {
 		port = "8080"
 	}
 	
-	// ctx := context.Background()
-
-	// application := application.NewUserApplication(repositories.NewUserRepository(db))
-
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: graph.NewResolver(application.NewUserApplication(repositories.NewUserRepository(db)) )}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
