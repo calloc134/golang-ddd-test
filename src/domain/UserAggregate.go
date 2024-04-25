@@ -16,11 +16,8 @@ type UserAggregate struct {
 	Version int
 }
 
-func NewUserAggregate(name string, age int) (*UserAggregate, error) {
+func NewUserAggregate() (*UserAggregate, error) {
 
-	if name == "" {
-		return nil, ErrEmptyName
-	}
 
 	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
 	ms := ulid.Timestamp(time.Now())
@@ -32,8 +29,8 @@ func NewUserAggregate(name string, age int) (*UserAggregate, error) {
 
 	return &UserAggregate{
 		ULID: ulid.String(),
-		Name: name,
-		Age:  age,
+		Name: "",
+		Age:  -1,
 		Version: 0,
 	}, nil
 }
