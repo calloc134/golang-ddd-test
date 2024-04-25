@@ -7,6 +7,6 @@ type UserTable struct {
 	ULID 		string `bun:"pk,type:vargchar(26)"`
 	Name 		string `bun:"type:varchar(255)"`
 	Age 		int 
-	Version 	int `bun:"version"`
+	Version 	int 
 }
 
