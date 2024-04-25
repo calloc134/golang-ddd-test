@@ -13,6 +13,7 @@ type UserAggregate struct {
 	ULID  string
 	Name string
 	Age  int
+	Version int
 }
 
 func NewUserAggregate(name string, age int) (*UserAggregate, error) {
@@ -33,6 +34,7 @@ func NewUserAggregate(name string, age int) (*UserAggregate, error) {
 		ULID: ulid.String(),
 		Name: name,
 		Age:  age,
+		Version: 0,
 	}, nil
 }
 
