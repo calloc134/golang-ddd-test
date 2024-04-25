@@ -47,7 +47,7 @@ func (ur UserRepository) FindByUlid(context context.Context, uuid string) (*doma
 	
 	userTable := schemas.UserTable{}
 
-	err := ur.db.NewSelect().Model(&userTable).Where("id = ?", uuid).Scan(context)
+	err := ur.db.NewSelect().Model(&userTable).Where("ulid = ?", uuid).Scan(context)
 
 	if err != nil {
 		return nil, err
