@@ -2,7 +2,15 @@ package main
 
 import (
 	"database/sql"
+	"log"
+	"net/http"
+	"os"
 
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/calloc134/golang-ddd-test/cmd/api/graph"
+	"github.com/calloc134/golang-ddd-test/src/application"
+	"github.com/calloc134/golang-ddd-test/src/repositories"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/sqliteshim"
@@ -23,10 +31,21 @@ func main() {
 		bundebug.FromEnv(""),
 	))
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	
 	// ctx := context.Background()
 
 	// application := application.NewUserApplication(repositories.NewUserRepository(db))
 
-	// ec := echo.New()
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: graph.NewResolver(application.NewUserApplication(repositories.NewUserRepository(db)) )}))
+
+	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	http.Handle("/query", srv)
+
+	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 }

@@ -28,12 +28,36 @@ func (r *mutationResolver) DeleteUserByUlid(ctx context.Context, ulid string) (*
 
 // FindAllUsers is the resolver for the findAllUsers field.
 func (r *queryResolver) FindAllUsers(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: FindAllUsers - findAllUsers"))
+	result, err :=  r.Resolver.UserApplication.FindAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	users := []*model.User{}
+
+	for _, user := range result {
+		users = append(users, &model.User{
+			Ulid: user.ULID,
+			Name: user.Name,
+			Age: user.Age,
+		})
+	}
+
+	return users, nil
 }
 
 // FindUserByUlid is the resolver for the findUserByUlid field.
 func (r *queryResolver) FindUserByUlid(ctx context.Context, ulid string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: FindUserByUlid - findUserByUlid"))
+	result, err := r.Resolver.UserApplication.FindByUlid(ctx, ulid)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.User{
+		Ulid: result.ULID,
+		Name: result.Name,
+		Age: result.Age,
+	}, nil
 }
 
 // Mutation returns MutationResolver implementation.
