@@ -9,8 +9,8 @@ import (
 // UserAggregate is a struct that represents the User aggregate
 type IUserRepository interface {
 	FindAll(context context.Context) ([]domain.UserAggregate, error)
-	FindByUlid(context context.Context, uuid string) (domain.UserAggregate, error)
-	Save(context context.Context, user domain.UserAggregate) error
+	FindByUlid(context context.Context, uuid string) (*domain.UserAggregate, error)
+	Save(context context.Context, user *domain.UserAggregate) (*domain.UserAggregate, error)
 }
 
 type UserApplication struct {
@@ -25,10 +25,48 @@ func (ua *UserApplication) FindAll(context context.Context) ([]domain.UserAggreg
 	return ua.UserRepository.FindAll(context)
 }
 
-func (ua *UserApplication) FindByUlid(context context.Context, uuid string) (domain.UserAggregate, error) {
+func (ua *UserApplication) NewUser(context context.Context, name string, age int) (*domain.UserAggregate, error) {
+	user, err := domain.NewUserAggregate(name, age)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ua.UserRepository.Save(context, user)
+}
+
+func (ua *UserApplication) FindByUlid(context context.Context, uuid string) (*domain.UserAggregate, error) {
 	return ua.UserRepository.FindByUlid(context, uuid)
 }
 
-func (ua *UserApplication) Save(context context.Context, user domain.UserAggregate) error {
+func (ua *UserApplication) UpdateNameByUlid(context context.Context, uuid string, name string) (*domain.UserAggregate, error) {
+	user, err := ua.FindByUlid(context, uuid)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = user.SetName(name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ua.UserRepository.Save(context, user)
+}
+
+func (ua *UserApplication) UpdateAgeByUlid(context context.Context, uuid string, age int) (*domain.UserAggregate, error) {
+	user, err := ua.FindByUlid(context, uuid)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = user.SetAge(age)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return ua.UserRepository.Save(context, user)
 }

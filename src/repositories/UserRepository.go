@@ -43,17 +43,17 @@ func (ur UserRepository) FindAll(context context.Context) ([]domain.UserAggregat
 	return users, nil
 }
 
-func (ur UserRepository) FindByUlid(context context.Context, uuid string) (domain.UserAggregate, error) {
+func (ur UserRepository) FindByUlid(context context.Context, uuid string) (*domain.UserAggregate, error) {
 	
 	userTable := schemas.UserTable{}
 
 	err := ur.db.NewSelect().Model(&userTable).Where("id = ?", uuid).Scan(context)
 
 	if err != nil {
-		return domain.UserAggregate{}, err
+		return nil, err
 	}
 
-	return domain.UserAggregate{
+	return &domain.UserAggregate{
 		ULID: userTable.ULID,
 		Name: userTable.Name,
 		Age: userTable.Age,
@@ -63,25 +63,25 @@ func (ur UserRepository) FindByUlid(context context.Context, uuid string) (domai
 	
 }
 
-func (ur UserRepository) Save(context context.Context, user domain.UserAggregate) error {
+func (ur UserRepository) Save(context context.Context, user *domain.UserAggregate) (*domain.UserAggregate, error) {
 
 	tx, err := ur.db.BeginTx(context, nil)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	defer tx.Rollback()
 
 	// 楽観的ロックの判定
-	exists, err := tx.NewSelect().Model(&schemas.UserTable{}).Where("ulid = ? and version = ?", user.ULID, user.Version).Exists(context)
+	// ulidが一致したらversionを取得 versionが一致したらパス
+	var version int;
+	err = tx.NewSelect().Model(&schemas.UserTable{}).Column("version").Where("ulid = ?", user.ULID).Scan(context, &version);
 
-	if err != nil {
-		return err
-	}
-
-	if !exists {
-		return errors.New("楽観的ロックエラー")
+	// データがない場合はスルー
+	// データがあってversionが一致しない場合はエラー
+	if err != nil && version != user.Version {
+		return nil, errors.New("楽観的ロックエラー")
 	}
 
 	userTable := schemas.UserTable{
@@ -94,17 +94,21 @@ func (ur UserRepository) Save(context context.Context, user domain.UserAggregate
 	_, err = tx.NewInsert().Model(&userTable).Exec(context);
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = tx.Commit()
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-
-	return nil
+	return &domain.UserAggregate{
+		ULID: userTable.ULID,
+		Name: userTable.Name,
+		Age: userTable.Age,
+		Version: userTable.Version,
+	}, nil
 }
 
 
