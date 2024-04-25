@@ -21,11 +21,11 @@ func NewUserApplication(userRepository IUserRepository) UserApplication {
 	return UserApplication{UserRepository: userRepository}
 }
 
-func (ua *UserApplication) FindAllUsers(context context.Context) ([]domain.UserAggregate, error) {
+func (ua *UserApplication) FindAll(context context.Context) ([]domain.UserAggregate, error) {
 	return ua.UserRepository.FindAll(context)
 }
 
-func (ua *UserApplication) FindUserByUlid(context context.Context, uuid string) (domain.UserAggregate, error) {
+func (ua *UserApplication) FindByUlid(context context.Context, uuid string) (domain.UserAggregate, error) {
 	return ua.UserRepository.FindByUlid(context, uuid)
 }
 
