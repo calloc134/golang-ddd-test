@@ -1,0 +1,26 @@
+type User {
+  ulid: String!
+  name: String!
+  age: Int!
+}
+
+type Query {
+  findAllUsers: [User!]!
+  findUserByUlid(ulid: String!): User!
+}
+
+input CreateUserInput {
+  name: String!
+  age: Int!
+}
+
+input UpdateUserInput {
+  name: String
+  age: Int
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+  updateUserByUlid(ulid: String!, input: UpdateUserInput!): User!
+  deleteUserByUlid(ulid: String!): User!
+}
