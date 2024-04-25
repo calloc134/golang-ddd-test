@@ -77,7 +77,7 @@ func (ur UserRepository) Save(context context.Context, user *domain.UserAggregat
 	// ulidが一致したらversionを取得 versionが一致したらパス
 	var version int;
 	err = tx.NewSelect().Model(&schemas.UserTable{}).Column("version").Where("ulid = ?", user.ULID).Scan(context, &version);
-
+	
 	// データがない場合はスルー
 	// データがあってversionが一致しない場合はエラー
 	if err != nil && version != user.Version {
@@ -91,6 +91,15 @@ func (ur UserRepository) Save(context context.Context, user *domain.UserAggregat
 		Version: user.Version + 1,
 	}
 
+	// データがある場合は削除
+	if err == nil || err.Error() != "bun: no rows in result set" {
+		_, err = tx.NewDelete().Model(&userTable).Where("ulid = ?", user.ULID).Exec(context);
+		
+		if err != nil {
+			return nil, err
+		}
+	}
+	
 	_, err = tx.NewInsert().Model(&userTable).Exec(context);
 
 	if err != nil {
