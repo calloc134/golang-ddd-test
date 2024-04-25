@@ -92,6 +92,7 @@ func (ur UserRepository) Save(context context.Context, user *domain.UserAggregat
 	}
 
 	// データがある場合は削除
+	// 更新時に過去データを削除するか、削除はバッチ処理にして参照の条件を工夫するかは要検討
 	if err == nil || err.Error() != "bun: no rows in result set" {
 		_, err = tx.NewDelete().Model(&userTable).Where("ulid = ?", user.ULID).Exec(context);
 		
