@@ -41,7 +41,7 @@ func (ur UserRepository) FindAll(context context.Context) ([]domain.UserAggregat
 	return users, nil
 }
 
-func (ur UserRepository) FindByID(context context.Context, uuid string) (domain.UserAggregate, error) {
+func (ur UserRepository) FindByUlid(context context.Context, uuid string) (domain.UserAggregate, error) {
 	
 	userTable := schemas.UserTable{}
 
