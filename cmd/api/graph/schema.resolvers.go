@@ -11,14 +11,48 @@ import (
 	"github.com/calloc134/golang-ddd-test/cmd/api/graph/model"
 )
 
-// CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+// NewUser is the resolver for the newUser field.
+func (r *mutationResolver) NewUser(ctx context.Context, input model.CreateUserInput) (*model.User, error) {
+	user, err := r.Resolver.UserApplication.NewUser(ctx, input.Name, input.Age)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.User{
+		Ulid: user.ULID,
+		Name: user.Name,
+		Age:  user.Age,
+	}, nil
 }
 
-// UpdateUserByUlid is the resolver for the updateUserByUlid field.
-func (r *mutationResolver) UpdateUserByUlid(ctx context.Context, ulid string, input model.UpdateUserInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: UpdateUserByUlid - updateUserByUlid"))
+// UpdateNameByUlid is the resolver for the updateNameByUlid field.
+func (r *mutationResolver) UpdateNameByUlid(ctx context.Context, ulid string, name string) (*model.User, error) {
+	user, err := r.Resolver.UserApplication.UpdateNameByUlid(ctx, ulid, name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.User{
+		Ulid: user.ULID,
+		Name: user.Name,
+		Age:  user.Age,
+	}, nil
+}
+
+// UpdateAgeByUlid is the resolver for the updateAgeByUlid field.
+func (r *mutationResolver) UpdateAgeByUlid(ctx context.Context, ulid string, age int) (*model.User, error) {
+	user, err := r.Resolver.UserApplication.UpdateAgeByUlid(ctx, ulid, age)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.User{
+		Ulid: user.ULID,
+		Name: user.Name,
+		Age:  user.Age,
+	}, nil
 }
 
 // DeleteUserByUlid is the resolver for the deleteUserByUlid field.
@@ -28,7 +62,7 @@ func (r *mutationResolver) DeleteUserByUlid(ctx context.Context, ulid string) (*
 
 // FindAllUsers is the resolver for the findAllUsers field.
 func (r *queryResolver) FindAllUsers(ctx context.Context) ([]*model.User, error) {
-	result, err :=  r.Resolver.UserApplication.FindAll(ctx)
+	result, err := r.Resolver.UserApplication.FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +73,7 @@ func (r *queryResolver) FindAllUsers(ctx context.Context) ([]*model.User, error)
 		users = append(users, &model.User{
 			Ulid: user.ULID,
 			Name: user.Name,
-			Age: user.Age,
+			Age:  user.Age,
 		})
 	}
 
@@ -56,7 +90,7 @@ func (r *queryResolver) FindUserByUlid(ctx context.Context, ulid string) (*model
 	return &model.User{
 		Ulid: result.ULID,
 		Name: result.Name,
-		Age: result.Age,
+		Age:  result.Age,
 	}, nil
 }
 

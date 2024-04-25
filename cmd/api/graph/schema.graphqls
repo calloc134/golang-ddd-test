@@ -19,8 +19,10 @@ input UpdateUserInput {
   age: Int
 }
 
+# Mutationはユースケースに沿うように定義する
 type Mutation {
-  createUser(input: CreateUserInput!): User!
-  updateUserByUlid(ulid: String!, input: UpdateUserInput!): User!
+  newUser(input: CreateUserInput!): User!
+  updateNameByUlid(ulid: String!, name: String!): User!
+  updateAgeByUlid(ulid: String!, age: Int!): User!
   deleteUserByUlid(ulid: String!): User!
 }
