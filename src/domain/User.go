@@ -8,16 +8,19 @@ import (
 	"github.com/oklog/ulid/v2"
 )
 
-// UserAggregate is the aggregate root.
-type UserAggregate struct {
-	ULID  string
-	Name string
-	Age  int
-	Version int
+// User is the aggregate root.
+type User struct {
+	ULID       string
+	UserDetail *UserDetail
+	Version    int
 }
 
-func NewUserAggregate() (*UserAggregate, error) {
+type UserDetail struct {
+	Name string
+	Age  int
+}
 
+func NewUserAggregate() (*User, error) {
 
 	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
 	ms := ulid.Timestamp(time.Now())
@@ -27,23 +30,23 @@ func NewUserAggregate() (*UserAggregate, error) {
 		return nil, err
 	}
 
-	return &UserAggregate{
-		ULID: ulid.String(),
-		Name: "",
-		Age:  -1,
+	return &User{
+		ULID:    ulid.String(),
+		Name:    "",
+		Age:     -1,
 		Version: 0,
 	}, nil
 }
 
-func (u *UserAggregate) GetName() string {
+func (u *User) GetName() string {
 	return u.Name
 }
 
-func (u *UserAggregate) GetAge() int {
+func (u *User) GetAge() int {
 	return u.Age
 }
 
-func (u *UserAggregate) SetName(name string) error {
+func (u *User) SetName(name string) error {
 	if name == "" {
 		return ErrEmptyName
 	}
@@ -52,7 +55,7 @@ func (u *UserAggregate) SetName(name string) error {
 	return nil
 }
 
-func (u *UserAggregate) SetAge(age int) error {
+func (u *User) SetAge(age int) error {
 	if 0 < age && age < 90 {
 		return ErrInvalidAge
 	}
