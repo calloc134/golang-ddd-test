@@ -26,19 +26,7 @@ func (ua *UserApplication) FindAll(context context.Context) ([]domain.User, erro
 }
 
 func (ua *UserApplication) NewUser(context context.Context, name string, age int) (*domain.User, error) {
-	user, err := domain.NewUserAggregate()
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = user.SetName(name)
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = user.SetAge(age)
+	user, err := domain.NewUser(name, age)
 
 	if err != nil {
 		return nil, err
