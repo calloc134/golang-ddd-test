@@ -16,6 +16,7 @@ type User struct {
 }
 
 type UserDetail struct {
+	ULID string
 	Name string
 	Age  int
 }
@@ -34,6 +35,7 @@ func NewUser(name string, age int) (*User, error) {
 		ULID:    ulid.String(),
 		Version: 0,
 		UserDetail: &UserDetail{
+			ULID: ulid.String(),
 			Name: "",
 			Age:  0,
 		},
@@ -65,7 +67,21 @@ func (u *User) SetName(name string) error {
 		return ErrEmptyName
 	}
 
-	u.UserDetail.Name = name
+	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
+	ms := ulid.Timestamp(time.Now())
+	ulid, err := ulid.New(ms, entropy)
+
+	if err != nil {
+		return err
+	}
+
+	userDetail := &UserDetail{
+		ULID: ulid.String(),
+		Name: name,
+		Age:  u.UserDetail.Age,
+	}
+
+	u.UserDetail = userDetail
 	return nil
 }
 
@@ -74,7 +90,21 @@ func (u *User) SetAge(age int) error {
 		return ErrInvalidAge
 	}
 
-	u.UserDetail.Age = age
+	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
+	ms := ulid.Timestamp(time.Now())
+	ulid, err := ulid.New(ms, entropy)
+
+	if err != nil {
+		return err
+	}
+
+	userDetail := &UserDetail{
+		ULID: ulid.String(),
+		Name: u.UserDetail.Name,
+		Age:  age,
+	}
+
+	u.UserDetail = userDetail
 	return nil
 }
 

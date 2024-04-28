@@ -33,7 +33,7 @@ func (ur UserRepository) FindAll(context context.Context) ([]domain.User, error)
 
 	for _, userTable := range userTables {
 		users = append(users, domain.User{
-			ULID:    userTable.ULID,
+			ULID:    userTable.UserULID,
 			Version: userTable.Version,
 			UserDetail: &domain.UserDetail{
 				Name: userTable.UserDetail.Name,
@@ -49,14 +49,14 @@ func (ur UserRepository) FindByUlid(context context.Context, uuid string) (*doma
 
 	userTable := schemas.UserTable{}
 
-	err := ur.db.NewSelect().Model(&userTable).Where("ulid = ?", uuid).Relation("UserDetail").Scan(context)
+	err := ur.db.NewSelect().Model(&userTable).Where("user_ulid = ?", uuid).Relation("UserDetail").Scan(context)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &domain.User{
-		ULID: userTable.ULID,
+		ULID: userTable.UserULID,
 		UserDetail: &domain.UserDetail{
 			Name: userTable.UserDetail.Name,
 			Age:  userTable.UserDetail.Age,
@@ -79,7 +79,7 @@ func (ur UserRepository) Save(context context.Context, user *domain.User) (*doma
 	// 楽観的ロックの判定
 	// ulidが一致したらversionを取得 versionが一致したらパス
 	var version int
-	versionCheckErr := tx.NewSelect().Model(&schemas.UserTable{}).Column("version").Where("ulid = ?", user.ULID).Scan(context, &version)
+	versionCheckErr := tx.NewSelect().Model(&schemas.UserTable{}).Column("version").Where("user_ulid = ?", user.ULID).Scan(context, &version)
 
 	// データがあってversionが一致しない場合はエラー
 	if versionCheckErr != nil && version != user.Version {
@@ -87,14 +87,15 @@ func (ur UserRepository) Save(context context.Context, user *domain.User) (*doma
 	}
 
 	userTable := schemas.UserTable{
-		ULID:    user.ULID,
-		Version: user.Version + 1,
+		UserULID:       user.ULID,
+		Version:        user.Version + 1,
+		UserDetailULID: user.UserDetail.ULID,
 	}
 
 	userDetailTable := schemas.UserDetailTable{
-		Name:   user.UserDetail.Name,
-		Age:    user.UserDetail.Age,
-		UserID: user.ULID,
+		UserDetailULID: user.UserDetail.ULID,
+		Name:           user.UserDetail.Name,
+		Age:            user.UserDetail.Age,
 	}
 
 	_, err = tx.NewInsert().Model(&userDetailTable).Exec(context)
@@ -112,7 +113,7 @@ func (ur UserRepository) Save(context context.Context, user *domain.User) (*doma
 		}
 	} else {
 		fmt.Println("update")
-		_, err = tx.NewUpdate().Model(&userTable).Set("version = ?", userTable.Version).Where("ulid = ?", user.ULID).Exec(context)
+		_, err = tx.NewUpdate().Model(&userTable).Set("version = ?, user_detail_ulid = ?", userTable.Version, userTable.UserDetailULID).Where("user_ulid = ?", userTable.UserULID).Exec(context)
 
 		if err != nil {
 			return nil, err
