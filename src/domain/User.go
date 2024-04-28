@@ -67,6 +67,11 @@ func (u *User) SetName(name string) error {
 		return ErrEmptyName
 	}
 
+	// varchar(255)の制約を満たすために255文字以内に切り捨てる
+	if len(name) > 255 {
+		return ErrEmptyName
+	}
+
 	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
 	ms := ulid.Timestamp(time.Now())
 	ulid, err := ulid.New(ms, entropy)
@@ -109,6 +114,7 @@ func (u *User) SetAge(age int) error {
 }
 
 var (
-	ErrEmptyName  = errors.New("empty name")
-	ErrInvalidAge = errors.New("invalid age")
+	ErrEmptyName   = errors.New("empty name")
+	ErrInvalidName = errors.New("invalid name")
+	ErrInvalidAge  = errors.New("invalid age")
 )
