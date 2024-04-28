@@ -10,20 +10,28 @@ import (
 
 func init() {
 	Migrations.MustRegister(func(ctx context.Context, db *bun.DB) error {
-			fmt.Print(" [up migration] ")
+		fmt.Print(" [up migration] ")
+
+		models := []interface{}{
+			(*schemas.UserTable)(nil),
+			(*schemas.UserDetailTable)(nil),
+		}
+
+		for _, model := range models {
 
 			q := db.NewCreateTable().
 				IfNotExists().
-				Model((*schemas.UserTable)(nil))
+				Model(model)
 
 			fmt.Println(q.String())
-			
+
 			_, err := q.Exec(ctx)
 
 			if err != nil {
 				return err
 			}
-			return nil
+		}
+		return nil
 	}, func(ctx context.Context, db *bun.DB) error {
 		fmt.Print(" [down migration] ")
 
@@ -31,7 +39,7 @@ func init() {
 			IfExists().
 			Model((*schemas.UserTable)(nil))
 
-		_, err  := q.Exec(ctx)
+		_, err := q.Exec(ctx)
 
 		if err != nil {
 			return err
