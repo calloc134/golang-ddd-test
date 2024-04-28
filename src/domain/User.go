@@ -35,7 +35,6 @@ func NewUser(name string, age int) (*User, error) {
 		ULID:    ulid.String(),
 		Version: 0,
 		UserDetail: &UserDetail{
-			ULID: ulid.String(),
 			Name: "",
 			Age:  0,
 		},
