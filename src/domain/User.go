@@ -86,7 +86,7 @@ func (u *User) SetName(name string) error {
 }
 
 func (u *User) SetAge(age int) error {
-	if 0 < age && age < 90 {
+	if age < 0 || age > 120 {
 		return ErrInvalidAge
 	}
 
