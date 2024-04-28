@@ -53,14 +53,6 @@ func NewUser(name string, age int) (*User, error) {
 	return user, nil
 }
 
-func (u *User) GetName() string {
-	return u.UserDetail.Name
-}
-
-func (u *User) GetAge() int {
-	return u.UserDetail.Age
-}
-
 func (u *User) SetName(name string) error {
 	if name == "" {
 		return ErrEmptyName
