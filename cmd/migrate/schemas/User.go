@@ -11,7 +11,6 @@ type UserTable struct {
 
 type UserDetailTable struct {
 	bun.BaseModel `bun:"table:user_details"`
-	ULID          string `bun:",pk,type:vargchar(26)"`
 	Name          string `bun:"type:varchar(255)"`
 	Age           int
 	UserID        string `bun:"type:varchar(26)"`
