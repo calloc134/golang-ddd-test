@@ -20,7 +20,7 @@ type UserDetail struct {
 	Age  int
 }
 
-func NewUserAggregate() (*User, error) {
+func NewUser(name string, age int) (*User, error) {
 
 	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
 	ms := ulid.Timestamp(time.Now())
@@ -30,20 +30,34 @@ func NewUserAggregate() (*User, error) {
 		return nil, err
 	}
 
-	return &User{
+	user := &User{
 		ULID:    ulid.String(),
-		Name:    "",
-		Age:     -1,
 		Version: 0,
-	}, nil
+		UserDetail: &UserDetail{
+			Name: "",
+			Age:  0,
+		},
+	}
+
+	err = user.SetName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	err = user.SetAge(age)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (u *User) GetName() string {
-	return u.Name
+	return u.UserDetail.Name
 }
 
 func (u *User) GetAge() int {
-	return u.Age
+	return u.UserDetail.Age
 }
 
 func (u *User) SetName(name string) error {
@@ -51,7 +65,7 @@ func (u *User) SetName(name string) error {
 		return ErrEmptyName
 	}
 
-	u.Name = name
+	u.UserDetail.Name = name
 	return nil
 }
 
@@ -60,7 +74,7 @@ func (u *User) SetAge(age int) error {
 		return ErrInvalidAge
 	}
 
-	u.Age = age
+	u.UserDetail.Age = age
 	return nil
 }
 
