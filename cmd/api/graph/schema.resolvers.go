@@ -20,8 +20,8 @@ func (r *mutationResolver) NewUser(ctx context.Context, input model.CreateUserIn
 
 	return &model.User{
 		Ulid: user.ULID,
-		Name: user.Name,
-		Age:  user.Age,
+		Name: user.UserDetail.Name,
+		Age:  user.UserDetail.Age,
 	}, nil
 }
 
@@ -35,8 +35,8 @@ func (r *mutationResolver) UpdateNameByUlid(ctx context.Context, ulid string, na
 
 	return &model.User{
 		Ulid: user.ULID,
-		Name: user.Name,
-		Age:  user.Age,
+		Name: user.UserDetail.Name,
+		Age:  user.UserDetail.Age,
 	}, nil
 }
 
@@ -50,8 +50,8 @@ func (r *mutationResolver) UpdateAgeByUlid(ctx context.Context, ulid string, age
 
 	return &model.User{
 		Ulid: user.ULID,
-		Name: user.Name,
-		Age:  user.Age,
+		Name: user.UserDetail.Name,
+		Age:  user.UserDetail.Age,
 	}, nil
 }
 
@@ -72,8 +72,8 @@ func (r *queryResolver) FindAllUsers(ctx context.Context) ([]*model.User, error)
 	for _, user := range result {
 		users = append(users, &model.User{
 			Ulid: user.ULID,
-			Name: user.Name,
-			Age:  user.Age,
+			Name: user.UserDetail.Name,
+			Age:  user.UserDetail.Age,
 		})
 	}
 
@@ -89,8 +89,8 @@ func (r *queryResolver) FindUserByUlid(ctx context.Context, ulid string) (*model
 
 	return &model.User{
 		Ulid: result.ULID,
-		Name: result.Name,
-		Age:  result.Age,
+		Name: result.UserDetail.Name,
+		Age:  result.UserDetail.Age,
 	}, nil
 }
 
