@@ -15,6 +15,10 @@ func init() {
 		models := []interface{}{
 			(*schemas.UserTable)(nil),
 			(*schemas.UserDetailTable)(nil),
+			(*schemas.PostTable)(nil),
+			(*schemas.PostDetailTable)(nil),
+			(*schemas.CommentTable)(nil),
+			(*schemas.CommentDetailTable)(nil),
 		}
 
 		for _, model := range models {
