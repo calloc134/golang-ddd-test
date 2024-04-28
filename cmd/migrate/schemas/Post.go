@@ -7,6 +7,7 @@ type PostTable struct {
 	PostULID       string           `bun:",pk,type:varchar(26)"`
 	PostDetail     *PostDetailTable `bun:"rel:belongs-to,join:post_detail_ulid=post_detail_ulid"`
 	PostDetailULID string
+	UserULID       string `bun:"type:varchar(26)"`
 	Version        int
 }
 
@@ -15,5 +16,4 @@ type PostDetailTable struct {
 	PostDetailULID string `bun:",pk,type:varchar(26)"`
 	Title          string `bun:"type:varchar(255)"`
 	Content        string `bun:"type:text"`
-	UserULID       string `bun:"type:varchar(26)"`
 }
