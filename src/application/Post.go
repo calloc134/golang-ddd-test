@@ -24,6 +24,10 @@ func (pa *PostApplication) FindAll(context context.Context) ([]domain.Post, erro
 	return pa.PostRepository.FindAll(context)
 }
 
+func (pa *PostApplication) FindByUlid(context context.Context, uuid string) (*domain.Post, error) {
+	return pa.PostRepository.FindByUlid(context, uuid)
+}
+
 func (pa *PostApplication) NewPost(context context.Context, userULID, title, content string) (*domain.Post, error) {
 	// TODO: ログインに対応させる
 	post, err := domain.NewPost(userULID, title, content)
