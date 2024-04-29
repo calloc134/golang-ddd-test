@@ -10,6 +10,12 @@ type CreateUserInput struct {
 type Mutation struct {
 }
 
+type Post struct {
+	Ulid    string `json:"ulid"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
+
 type Query struct {
 }
 
