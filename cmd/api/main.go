@@ -35,8 +35,11 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: graph.NewResolver(application.NewUserApplication(repositories.NewUserRepository(db)) )}))
+
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: graph.NewResolver(
+		application.NewUserApplication(repositories.NewUserRepository(db)),
+		application.NewPostApplication(repositories.NewPostRepository(db)),
+	)}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)

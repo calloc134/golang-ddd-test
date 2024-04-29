@@ -6,10 +6,14 @@ import "github.com/calloc134/golang-ddd-test/src/application"
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
 
-type Resolver struct{
+type Resolver struct {
 	UserApplication application.UserApplication
+	PostApplication application.PostApplication
 }
 
-func NewResolver(userApplication application.UserApplication) *Resolver {
-	return &Resolver{UserApplication: userApplication}
+func NewResolver(userApplication application.UserApplication, postApplication application.PostApplication) *Resolver {
+	return &Resolver{
+		UserApplication: userApplication,
+		PostApplication: postApplication,
+	}
 }
