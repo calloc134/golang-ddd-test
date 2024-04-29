@@ -4,9 +4,17 @@ type User {
   age: Int!
 }
 
+type Post {
+  ulid: String!
+  title: String!
+  content: String!
+}
+
 type Query {
   findAllUsers: [User!]!
   findUserByUlid(ulid: String!): User!
+  findAllPosts: [Post!]!
+  findPostByUlid(ulid: String!): Post!
 }
 
 input CreateUserInput {
@@ -25,4 +33,9 @@ type Mutation {
   updateNameByUlid(ulid: String!, name: String!): User!
   updateAgeByUlid(ulid: String!, age: Int!): User!
   deleteUserByUlid(ulid: String!): User!
+  # TODO: ログインユーザで投稿するようにする
+  newPost(userUlid: String!, title: String!, content: String!): Post!
+  updateTitleByUlid(ulid: String!, title: String!): Post!
+  updateContentByUlid(ulid: String!, content: String!): Post!
+  deletePostByUlid(ulid: String!): Post!
 }

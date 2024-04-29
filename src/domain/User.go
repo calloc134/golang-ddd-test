@@ -35,7 +35,6 @@ func NewUser(name string, age int) (*User, error) {
 		ULID:    ulid.String(),
 		Version: 0,
 		UserDetail: &UserDetail{
-			ULID: ulid.String(),
 			Name: "",
 			Age:  0,
 		},
@@ -52,14 +51,6 @@ func NewUser(name string, age int) (*User, error) {
 	}
 
 	return user, nil
-}
-
-func (u *User) GetName() string {
-	return u.UserDetail.Name
-}
-
-func (u *User) GetAge() int {
-	return u.UserDetail.Age
 }
 
 func (u *User) SetName(name string) error {

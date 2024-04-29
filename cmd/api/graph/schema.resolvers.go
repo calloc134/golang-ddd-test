@@ -57,7 +57,59 @@ func (r *mutationResolver) UpdateAgeByUlid(ctx context.Context, ulid string, age
 
 // DeleteUserByUlid is the resolver for the deleteUserByUlid field.
 func (r *mutationResolver) DeleteUserByUlid(ctx context.Context, ulid string) (*model.User, error) {
+	// TODO: 実装する
 	panic(fmt.Errorf("not implemented: DeleteUserByUlid - deleteUserByUlid"))
+}
+
+// NewPost is the resolver for the newPost field.
+func (r *mutationResolver) NewPost(ctx context.Context, userUlid string, title string, content string) (*model.Post, error) {
+	post, err := r.Resolver.PostApplication.NewPost(ctx, userUlid, title, content)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Post{
+		Ulid:    post.ULID,
+		Title:   post.PostDetail.Title,
+		Content: post.PostDetail.Content,
+	}, nil
+}
+
+// UpdateTitleByUlid is the resolver for the updateTitleByUlid field.
+func (r *mutationResolver) UpdateTitleByUlid(ctx context.Context, ulid string, title string) (*model.Post, error) {
+	post, err := r.Resolver.PostApplication.UpdateTitleByUlid(ctx, ulid, title)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Post{
+		Ulid:    post.ULID,
+		Title:   post.PostDetail.Title,
+		Content: post.PostDetail.Content,
+	}, nil
+}
+
+// UpdateContentByUlid is the resolver for the updateContentByUlid field.
+func (r *mutationResolver) UpdateContentByUlid(ctx context.Context, ulid string, content string) (*model.Post, error) {
+	post, err := r.Resolver.PostApplication.UpdateContentByUlid(ctx, ulid, content)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Post{
+		Ulid:    post.ULID,
+		Title:   post.PostDetail.Title,
+		Content: post.PostDetail.Content,
+	}, nil
+}
+
+// DeletePostByUlid is the resolver for the deletePostByUlid field.
+func (r *mutationResolver) DeletePostByUlid(ctx context.Context, ulid string) (*model.Post, error) {
+	// TODO: 実装する
+	panic(fmt.Errorf("not implemented: DeletePostByUlid - deletePostByUlid"))
 }
 
 // FindAllUsers is the resolver for the findAllUsers field.
@@ -91,6 +143,41 @@ func (r *queryResolver) FindUserByUlid(ctx context.Context, ulid string) (*model
 		Ulid: result.ULID,
 		Name: result.UserDetail.Name,
 		Age:  result.UserDetail.Age,
+	}, nil
+}
+
+// FindAllPosts is the resolver for the findAllPosts field.
+func (r *queryResolver) FindAllPosts(ctx context.Context) ([]*model.Post, error) {
+	result, err := r.Resolver.PostApplication.FindAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	posts := []*model.Post{}
+
+	for _, post := range result {
+		posts = append(posts, &model.Post{
+			Ulid:    post.ULID,
+			Title:   post.PostDetail.Title,
+			Content: post.PostDetail.Content,
+		})
+	}
+
+	return posts, nil
+}
+
+// FindPostByUlid is the resolver for the findPostByUlid field.
+func (r *queryResolver) FindPostByUlid(ctx context.Context, ulid string) (*model.Post, error) {
+	result, err := r.Resolver.PostApplication.FindByUlid(ctx, ulid)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Post{
+		Ulid:    result.ULID,
+		Title:   result.PostDetail.Title,
+		Content: result.PostDetail.Content,
 	}, nil
 }
 
