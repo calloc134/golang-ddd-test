@@ -46,9 +46,7 @@ func (ua *UserApplication) UpdateNameByUlid(context context.Context, uuid string
 		return nil, err
 	}
 
-	err = user.SetName(name)
-
-	if err != nil {
+	if err := user.SetName(name); err != nil {
 		return nil, err
 	}
 
@@ -62,9 +60,7 @@ func (ua *UserApplication) UpdateAgeByUlid(context context.Context, uuid string,
 		return nil, err
 	}
 
-	err = user.SetAge(age)
-
-	if err != nil {
+	if err := user.SetAge(age); err != nil {
 		return nil, err
 	}
 

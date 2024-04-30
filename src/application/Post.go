@@ -46,9 +46,7 @@ func (pa *PostApplication) UpdateTitleByUlid(context context.Context, uuid strin
 		return nil, err
 	}
 
-	err = post.SetTitle(title)
-
-	if err != nil {
+	if err := post.SetTitle(title); err != nil {
 		return nil, err
 	}
 
@@ -62,9 +60,7 @@ func (pa *PostApplication) UpdateContentByUlid(context context.Context, uuid str
 		return nil, err
 	}
 
-	err = post.SetContent(content)
-
-	if err != nil {
+	if err := post.SetContent(content); err != nil {
 		return nil, err
 	}
 
