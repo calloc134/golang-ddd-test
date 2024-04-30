@@ -40,13 +40,11 @@ func NewUser(name string, age int) (*User, error) {
 		},
 	}
 
-	err = user.SetName(name)
-	if err != nil {
+	if err := user.SetName(name); err != nil {
 		return nil, err
 	}
 
-	err = user.SetAge(age)
-	if err != nil {
+	if err := user.SetAge(age); err != nil {
 		return nil, err
 	}
 
