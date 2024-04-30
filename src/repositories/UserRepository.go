@@ -120,9 +120,7 @@ func (ur UserRepository) Save(context context.Context, user *domain.User) (*doma
 		}
 	}
 
-	err = tx.Commit()
-
-	if err != nil {
+	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
 

@@ -120,9 +120,7 @@ func (pr PostRepository) Save(context context.Context, post *domain.Post) (*doma
 		}
 	}
 
-	err = tx.Commit()
-
-	if err != nil {
+	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
 
