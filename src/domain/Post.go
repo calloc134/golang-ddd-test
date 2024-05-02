@@ -2,35 +2,75 @@ package domain
 
 import (
 	"errors"
-
-	"github.com/calloc134/golang-ddd-test/src/utils"
 )
 
 type Post struct {
-	ULID       string
+	ULID       UlidValue
 	PostDetail *PostDetail
 	Version    int
-	UserULID   string
+	UserULID   UlidValue
 }
 
 type PostDetail struct {
-	ULID    string
-	Title   string
-	Content string
+	ULID    UlidValue
+	Title   TitleValue
+	Content ContentValue
 }
 
-func NewPost(userUlid, title, content string) (*Post, error) {
+type TitleValue struct {
+	value string
+}
+
+type ContentValue struct {
+	value string
+}
+
+func NewTitle(value string) (TitleValue, error) {
+	if value == "" {
+		return TitleValue{}, ErrEmptyTitle
+	}
+
+	if len(value) > 255 {
+		return TitleValue{}, ErrInvalidTitle
+	}
+
+	return TitleValue{value: value}, nil
+}
+
+func NewContent(value string) (ContentValue, error) {
+	if value == "" {
+		return ContentValue{}, ErrEmptyContent
+	}
+
+	if len(value) > 65535 {
+		return ContentValue{}, ErrInvalidContent
+	}
+
+	return ContentValue{value: value}, nil
+}
+
+func NewPost(userUlidString string, titleString string, contentString string) (*Post, error) {
 
 	// ULIDのバリデーションはここでやってしまう
-	if userUlid == "" {
-		return nil, ErrEmptyUserUlid
+	userUlid, err := NewULID(userUlidString)
+
+	if err != nil {
+		return nil, err
 	}
 
-	if len(userUlid) != 26 {
-		return nil, ErrInvalidUserUlid
+	title, err := NewTitle(titleString)
+
+	if err != nil {
+		return nil, err
 	}
 
-	ulid, err := utils.GenerateULID()
+	content, err := NewContent(contentString)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ulid, err := GenerateULID()
 
 	if err != nil {
 		return nil, err
@@ -41,32 +81,23 @@ func NewPost(userUlid, title, content string) (*Post, error) {
 		Version:  0,
 		UserULID: userUlid,
 		PostDetail: &PostDetail{
-			Title:   "",
-			Content: "",
+			Title:   title,
+			Content: content,
 		},
-	}
-
-	if err := post.SetTitle(title); err != nil {
-		return nil, err
-	}
-
-	if err := post.SetContent(content); err != nil {
-		return nil, err
 	}
 
 	return post, nil
 }
 
-func (p *Post) SetTitle(title string) error {
-	if title == "" {
-		return ErrEmptyTitle
+func (p *Post) SetTitle(titleString string) error {
+
+	ulid, err := GenerateULID()
+
+	if err != nil {
+		return err
 	}
 
-	if len(title) > 255 {
-		return ErrInvalidTitle
-	}
-
-	ulid, err := utils.GenerateULID()
+	title, err := NewTitle(titleString)
 
 	if err != nil {
 		return err
@@ -82,16 +113,15 @@ func (p *Post) SetTitle(title string) error {
 	return nil
 }
 
-func (p *Post) SetContent(content string) error {
-	if content == "" {
-		return ErrEmptyContent
+func (p *Post) SetContent(contentString string) error {
+
+	ulid, err := GenerateULID()
+
+	if err != nil {
+		return err
 	}
 
-	if len(content) > 65535 {
-		return ErrInvalidContent
-	}
-
-	ulid, err := utils.GenerateULID()
+	content, err := NewContent(contentString)
 
 	if err != nil {
 		return err
