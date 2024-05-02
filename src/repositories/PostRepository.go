@@ -32,14 +32,38 @@ func (pr PostRepository) FindAll(context context.Context) ([]domain.Post, error)
 	var posts []domain.Post
 
 	for _, postTable := range postTables {
+		ulid, err := domain.NewULID(postTable.PostULID)
+
+		if err != nil {
+			return nil, err
+		}
+
+		userUlid, err := domain.NewULID(postTable.UserULID)
+
+		if err != nil {
+			return nil, err
+		}
+
+		title, err := domain.NewTitle(postTable.PostDetail.Title)
+
+		if err != nil {
+			return nil, err
+		}
+
+		content, err := domain.NewContent(postTable.PostDetail.Content)
+
+		if err != nil {
+			return nil, err
+		}
+
 		posts = append(posts, domain.Post{
-			ULID: postTable.PostULID,
+			ULID: ulid,
 			PostDetail: &domain.PostDetail{
-				Title:   postTable.PostDetail.Title,
-				Content: postTable.PostDetail.Content,
+				Title:   title,
+				Content: content,
 			},
 			Version:  postTable.Version,
-			UserULID: postTable.UserULID,
+			UserULID: userUlid,
 		})
 	}
 
@@ -56,14 +80,38 @@ func (pr PostRepository) FindByUlid(context context.Context, uuid string) (*doma
 		return nil, err
 	}
 
+	ulid, err := domain.NewULID(postTable.PostULID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	userUlid, err := domain.NewULID(postTable.UserULID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	title, err := domain.NewTitle(postTable.PostDetail.Title)
+
+	if err != nil {
+		return nil, err
+	}
+
+	content, err := domain.NewContent(postTable.PostDetail.Content)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &domain.Post{
-		ULID: postTable.PostULID,
+		ULID: ulid,
 		PostDetail: &domain.PostDetail{
-			Title:   postTable.PostDetail.Title,
-			Content: postTable.PostDetail.Content,
+			Title:   title,
+			Content: content,
 		},
 		Version:  postTable.Version,
-		UserULID: postTable.UserULID,
+		UserULID: userUlid,
 	}, nil
 }
 
@@ -86,16 +134,16 @@ func (pr PostRepository) Save(context context.Context, post *domain.Post) (*doma
 	}
 
 	postTable := schemas.PostTable{
-		PostULID:       post.ULID,
-		UserULID:       post.UserULID,
+		PostULID:       post.ULID.String(),
+		UserULID:       post.UserULID.String(),
 		Version:        post.Version + 1,
-		PostDetailULID: post.PostDetail.ULID,
+		PostDetailULID: post.PostDetail.ULID.String(),
 	}
 
 	postDetailTable := schemas.PostDetailTable{
-		PostDetailULID: post.PostDetail.ULID,
-		Title:          post.PostDetail.Title,
-		Content:        post.PostDetail.Content,
+		PostDetailULID: post.PostDetail.ULID.String(),
+		Title:          post.PostDetail.Title.String(),
+		Content:        post.PostDetail.Content.String(),
 	}
 
 	_, err = tx.NewInsert().Model(&postDetailTable).Exec(context)

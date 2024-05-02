@@ -32,12 +32,31 @@ func (ur UserRepository) FindAll(context context.Context) ([]domain.User, error)
 	var users []domain.User
 
 	for _, userTable := range userTables {
+
+		ulid, err := domain.NewULID(userTable.UserULID)
+
+		if err != nil {
+			return nil, err
+		}
+
+		name, err := domain.NewName(userTable.UserDetail.Name)
+
+		if err != nil {
+			return nil, err
+		}
+
+		age, err := domain.NewAge(userTable.UserDetail.Age)
+
+		if err != nil {
+			return nil, err
+		}
+
 		users = append(users, domain.User{
-			ULID:    userTable.UserULID,
+			ULID:    ulid,
 			Version: userTable.Version,
 			UserDetail: &domain.UserDetail{
-				Name: userTable.UserDetail.Name,
-				Age:  userTable.UserDetail.Age,
+				Name: name,
+				Age:  age,
 			},
 		})
 	}
@@ -55,11 +74,29 @@ func (ur UserRepository) FindByUlid(context context.Context, uuid string) (*doma
 		return nil, err
 	}
 
+	ulid, err := domain.NewULID(userTable.UserULID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	name, err := domain.NewName(userTable.UserDetail.Name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	age, err := domain.NewAge(userTable.UserDetail.Age)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return &domain.User{
-		ULID: userTable.UserULID,
+		ULID: ulid,
 		UserDetail: &domain.UserDetail{
-			Name: userTable.UserDetail.Name,
-			Age:  userTable.UserDetail.Age,
+			Name: name,
+			Age:  age,
 		},
 		Version: userTable.Version,
 	}, nil
@@ -87,15 +124,15 @@ func (ur UserRepository) Save(context context.Context, user *domain.User) (*doma
 	}
 
 	userTable := schemas.UserTable{
-		UserULID:       user.ULID,
+		UserULID:       user.ULID.String(),
 		Version:        user.Version + 1,
-		UserDetailULID: user.UserDetail.ULID,
+		UserDetailULID: user.UserDetail.ULID.String(),
 	}
 
 	userDetailTable := schemas.UserDetailTable{
-		UserDetailULID: user.UserDetail.ULID,
-		Name:           user.UserDetail.Name,
-		Age:            user.UserDetail.Age,
+		UserDetailULID: user.UserDetail.ULID.String(),
+		Name:           user.UserDetail.Name.String(),
+		Age:            user.UserDetail.Age.Int(),
 	}
 
 	_, err = tx.NewInsert().Model(&userDetailTable).Exec(context)
