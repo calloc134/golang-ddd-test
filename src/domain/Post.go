@@ -25,6 +25,14 @@ type ContentValue struct {
 	value string
 }
 
+func (t TitleValue) String() string {
+	return t.value
+}
+
+func (c ContentValue) String() string {
+	return c.value
+}
+
 func NewTitle(value string) (TitleValue, error) {
 	if value == "" {
 		return TitleValue{}, ErrEmptyTitle

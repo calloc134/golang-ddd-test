@@ -25,6 +25,14 @@ type AgeValue struct {
 	value int
 }
 
+func (n NameValue) String() string {
+	return n.value
+}
+
+func (a AgeValue) Int() int {
+	return a.value
+}
+
 func NewName(value string) (NameValue, error) {
 	if value == "" {
 		return NameValue{}, ErrEmptyName

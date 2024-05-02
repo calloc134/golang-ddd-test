@@ -46,6 +46,10 @@ func (u *UlidValue) Equals(target *UlidValue) bool {
 	return u.value == target.value
 }
 
+func (u *UlidValue) String() string {
+	return u.value
+}
+
 var (
 	ErrEmptyULID   = errors.New("empty ulid")
 	ErrInvalidULID = errors.New("invalid ulid")
