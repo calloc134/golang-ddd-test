@@ -51,13 +51,13 @@ func NewContent(value string) (ContentValue, error) {
 
 func NewPost(userUlidString string, titleString string, contentString string) (*Post, error) {
 
-	userUlid, err := NewULID(userUlidString)
+	title, err := NewTitle(titleString)
 
 	if err != nil {
 		return nil, err
 	}
 
-	title, err := NewTitle(titleString)
+	userUlid, err := NewULID(userUlidString)
 
 	if err != nil {
 		return nil, err
@@ -90,13 +90,13 @@ func NewPost(userUlidString string, titleString string, contentString string) (*
 
 func (p *Post) SetTitle(titleString string) error {
 
-	ulid, err := GenerateULID()
+	title, err := NewTitle(titleString)
 
 	if err != nil {
 		return err
 	}
 
-	title, err := NewTitle(titleString)
+	ulid, err := GenerateULID()
 
 	if err != nil {
 		return err

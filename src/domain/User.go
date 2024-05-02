@@ -47,13 +47,13 @@ func NewAge(value int) (AgeValue, error) {
 
 func NewUser(nameString string, ageInt int) (*User, error) {
 
-	ulid, err := GenerateULID()
+	name, err := NewName(nameString)
 
 	if err != nil {
 		return nil, err
 	}
 
-	name, err := NewName(nameString)
+	ulid, err := GenerateULID()
 
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func NewUser(nameString string, ageInt int) (*User, error) {
 
 func (u *User) SetName(nameString string) error {
 
-	ulid, err := GenerateULID()
+	name, err := NewName(nameString)
 
 	if err != nil {
 		return err
 	}
 
-	name, err := NewName(nameString)
+	ulid, err := GenerateULID()
 
 	if err != nil {
 		return err
