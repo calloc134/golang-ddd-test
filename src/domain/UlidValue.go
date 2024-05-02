@@ -12,34 +12,34 @@ type UlidValue struct {
 	value string
 }
 
-func GenerateULID() (*UlidValue, error) {
+func GenerateULID() (UlidValue, error) {
 	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
 	ms := ulid.Timestamp(time.Now())
 	ulid, err := ulid.New(ms, entropy)
 
 	if err != nil {
-		return nil, err
+		return UlidValue{}, err
 	}
 
 	ulidValue, err := NewULID(ulid.String())
 
 	if err != nil {
-		return nil, err
+		return UlidValue{}, err
 	}
 
 	return ulidValue, nil
 }
 
-func NewULID(value string) (*UlidValue, error) {
+func NewULID(value string) (UlidValue, error) {
 	if value == "" {
-		return nil, ErrEmptyULID
+		return UlidValue{}, ErrEmptyULID
 	}
 
 	if len(value) != 26 {
-		return nil, ErrInvalidULID
+		return UlidValue{}, ErrInvalidULID
 	}
 
-	return &UlidValue{value: value}, nil
+	return UlidValue{value: value}, nil
 }
 
 func (u *UlidValue) Equals(target *UlidValue) bool {
