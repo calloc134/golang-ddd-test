@@ -19,9 +19,9 @@ func (r *mutationResolver) NewUser(ctx context.Context, input model.CreateUserIn
 	}
 
 	return &model.User{
-		Ulid: user.ULID,
-		Name: user.UserDetail.Name,
-		Age:  user.UserDetail.Age,
+		Ulid: user.ULID.String(),
+		Name: user.UserDetail.Name.String(),
+		Age:  user.UserDetail.Age.Int(),
 	}, nil
 }
 
@@ -34,9 +34,9 @@ func (r *mutationResolver) UpdateNameByUlid(ctx context.Context, ulid string, na
 	}
 
 	return &model.User{
-		Ulid: user.ULID,
-		Name: user.UserDetail.Name,
-		Age:  user.UserDetail.Age,
+		Ulid: user.ULID.String(),
+		Name: user.UserDetail.Name.String(),
+		Age:  user.UserDetail.Age.Int(),
 	}, nil
 }
 
@@ -49,9 +49,9 @@ func (r *mutationResolver) UpdateAgeByUlid(ctx context.Context, ulid string, age
 	}
 
 	return &model.User{
-		Ulid: user.ULID,
-		Name: user.UserDetail.Name,
-		Age:  user.UserDetail.Age,
+		Ulid: user.ULID.String(),
+		Name: user.UserDetail.Name.String(),
+		Age:  user.UserDetail.Age.Int(),
 	}, nil
 }
 
@@ -70,9 +70,9 @@ func (r *mutationResolver) NewPost(ctx context.Context, userUlid string, title s
 	}
 
 	return &model.Post{
-		Ulid:    post.ULID,
-		Title:   post.PostDetail.Title,
-		Content: post.PostDetail.Content,
+		Ulid:    post.ULID.String(),
+		Title:   post.PostDetail.Title.String(),
+		Content: post.PostDetail.Content.String(),
 	}, nil
 }
 
@@ -85,9 +85,9 @@ func (r *mutationResolver) UpdateTitleByUlid(ctx context.Context, ulid string, t
 	}
 
 	return &model.Post{
-		Ulid:    post.ULID,
-		Title:   post.PostDetail.Title,
-		Content: post.PostDetail.Content,
+		Ulid:    post.ULID.String(),
+		Title:   post.PostDetail.Title.String(),
+		Content: post.PostDetail.Content.String(),
 	}, nil
 }
 
@@ -100,9 +100,9 @@ func (r *mutationResolver) UpdateContentByUlid(ctx context.Context, ulid string,
 	}
 
 	return &model.Post{
-		Ulid:    post.ULID,
-		Title:   post.PostDetail.Title,
-		Content: post.PostDetail.Content,
+		Ulid:    post.ULID.String(),
+		Title:   post.PostDetail.Title.String(),
+		Content: post.PostDetail.Content.String(),
 	}, nil
 }
 
@@ -123,9 +123,9 @@ func (r *queryResolver) FindAllUsers(ctx context.Context) ([]*model.User, error)
 
 	for _, user := range result {
 		users = append(users, &model.User{
-			Ulid: user.ULID,
-			Name: user.UserDetail.Name,
-			Age:  user.UserDetail.Age,
+			Ulid: user.ULID.String(),
+			Name: user.UserDetail.Name.String(),
+			Age:  user.UserDetail.Age.Int(),
 		})
 	}
 
@@ -140,9 +140,9 @@ func (r *queryResolver) FindUserByUlid(ctx context.Context, ulid string) (*model
 	}
 
 	return &model.User{
-		Ulid: result.ULID,
-		Name: result.UserDetail.Name,
-		Age:  result.UserDetail.Age,
+		Ulid: result.ULID.String(),
+		Name: result.UserDetail.Name.String(),
+		Age:  result.UserDetail.Age.Int(),
 	}, nil
 }
 
@@ -157,9 +157,9 @@ func (r *queryResolver) FindAllPosts(ctx context.Context) ([]*model.Post, error)
 
 	for _, post := range result {
 		posts = append(posts, &model.Post{
-			Ulid:    post.ULID,
-			Title:   post.PostDetail.Title,
-			Content: post.PostDetail.Content,
+			Ulid:    post.ULID.String(),
+			Title:   post.PostDetail.Title.String(),
+			Content: post.PostDetail.Content.String(),
 		})
 	}
 
@@ -175,9 +175,9 @@ func (r *queryResolver) FindPostByUlid(ctx context.Context, ulid string) (*model
 	}
 
 	return &model.Post{
-		Ulid:    result.ULID,
-		Title:   result.PostDetail.Title,
-		Content: result.PostDetail.Content,
+		Ulid:    result.ULID.String(),
+		Title:   result.PostDetail.Title.String(),
+		Content: result.PostDetail.Content.String(),
 	}, nil
 }
 
