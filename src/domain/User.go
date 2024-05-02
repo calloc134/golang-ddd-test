@@ -21,18 +21,28 @@ type UserDetail struct {
 	Age  int
 }
 
-func NewUser(name string, age int) (*User, error) {
-
+func generateULID() (string, error) {
 	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
 	ms := ulid.Timestamp(time.Now())
 	ulid, err := ulid.New(ms, entropy)
+
+	if err != nil {
+		return "", err
+	}
+
+	return ulid.String(), nil
+}
+
+func NewUser(name string, age int) (*User, error) {
+
+	ulid, err := generateULID()
 
 	if err != nil {
 		return nil, err
 	}
 
 	user := &User{
-		ULID:    ulid.String(),
+		ULID:    ulid,
 		Version: 0,
 		UserDetail: &UserDetail{
 			Name: "",
@@ -61,16 +71,14 @@ func (u *User) SetName(name string) error {
 		return ErrEmptyName
 	}
 
-	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
-	ms := ulid.Timestamp(time.Now())
-	ulid, err := ulid.New(ms, entropy)
+	ulid, err := generateULID()
 
 	if err != nil {
 		return err
 	}
 
 	userDetail := &UserDetail{
-		ULID: ulid.String(),
+		ULID: ulid,
 		Name: name,
 		Age:  u.UserDetail.Age,
 	}
@@ -84,16 +92,14 @@ func (u *User) SetAge(age int) error {
 		return ErrInvalidAge
 	}
 
-	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
-	ms := ulid.Timestamp(time.Now())
-	ulid, err := ulid.New(ms, entropy)
+	ulid, err := generateULID()
 
 	if err != nil {
 		return err
 	}
 
 	userDetail := &UserDetail{
-		ULID: ulid.String(),
+		ULID: ulid,
 		Name: u.UserDetail.Name,
 		Age:  age,
 	}
