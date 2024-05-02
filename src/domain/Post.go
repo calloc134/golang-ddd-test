@@ -2,10 +2,8 @@ package domain
 
 import (
 	"errors"
-	"math/rand"
-	"time"
 
-	"github.com/oklog/ulid/v2"
+	"github.com/calloc134/golang-ddd-test/src/utils"
 )
 
 type Post struct {
@@ -32,16 +30,14 @@ func NewPost(userUlid, title, content string) (*Post, error) {
 		return nil, ErrInvalidUserUlid
 	}
 
-	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
-	ms := ulid.Timestamp(time.Now())
-	ulid, err := ulid.New(ms, entropy)
+	ulid, err := utils.GenerateULID()
 
 	if err != nil {
 		return nil, err
 	}
 
 	post := &Post{
-		ULID:     ulid.String(),
+		ULID:     ulid,
 		Version:  0,
 		UserULID: userUlid,
 		PostDetail: &PostDetail{
@@ -70,16 +66,14 @@ func (p *Post) SetTitle(title string) error {
 		return ErrInvalidTitle
 	}
 
-	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
-	ms := ulid.Timestamp(time.Now())
-	ulid, err := ulid.New(ms, entropy)
+	ulid, err := utils.GenerateULID()
 
 	if err != nil {
 		return err
 	}
 
 	postDetail := &PostDetail{
-		ULID:    ulid.String(),
+		ULID:    ulid,
 		Title:   title,
 		Content: p.PostDetail.Content,
 	}
@@ -97,16 +91,14 @@ func (p *Post) SetContent(content string) error {
 		return ErrInvalidContent
 	}
 
-	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
-	ms := ulid.Timestamp(time.Now())
-	ulid, err := ulid.New(ms, entropy)
+	ulid, err := utils.GenerateULID()
 
 	if err != nil {
 		return err
 	}
 
 	postDetail := &PostDetail{
-		ULID:    ulid.String(),
+		ULID:    ulid,
 		Title:   p.PostDetail.Title,
 		Content: content,
 	}
