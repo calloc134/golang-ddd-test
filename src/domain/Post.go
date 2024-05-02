@@ -51,7 +51,6 @@ func NewContent(value string) (ContentValue, error) {
 
 func NewPost(userUlidString string, titleString string, contentString string) (*Post, error) {
 
-	// ULIDのバリデーションはここでやってしまう
 	userUlid, err := NewULID(userUlidString)
 
 	if err != nil {
