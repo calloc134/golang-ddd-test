@@ -2,10 +2,8 @@ package domain
 
 import (
 	"errors"
-	"math/rand"
-	"time"
 
-	"github.com/oklog/ulid/v2"
+	"github.com/calloc134/golang-ddd-test/src/utils"
 )
 
 // User is the aggregate root.
@@ -21,21 +19,9 @@ type UserDetail struct {
 	Age  int
 }
 
-func generateULID() (string, error) {
-	entropy := rand.New(rand.NewSource(time.Now().UnixNano()))
-	ms := ulid.Timestamp(time.Now())
-	ulid, err := ulid.New(ms, entropy)
-
-	if err != nil {
-		return "", err
-	}
-
-	return ulid.String(), nil
-}
-
 func NewUser(name string, age int) (*User, error) {
 
-	ulid, err := generateULID()
+	ulid, err := utils.GenerateULID()
 
 	if err != nil {
 		return nil, err
@@ -71,7 +57,7 @@ func (u *User) SetName(name string) error {
 		return ErrEmptyName
 	}
 
-	ulid, err := generateULID()
+	ulid, err := utils.GenerateULID()
 
 	if err != nil {
 		return err
@@ -92,7 +78,7 @@ func (u *User) SetAge(age int) error {
 		return ErrInvalidAge
 	}
 
-	ulid, err := generateULID()
+	ulid, err := utils.GenerateULID()
 
 	if err != nil {
 		return err
