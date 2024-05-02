@@ -2,26 +2,64 @@ package domain
 
 import (
 	"errors"
-
-	"github.com/calloc134/golang-ddd-test/src/utils"
 )
 
 // User is the aggregate root.
 type User struct {
-	ULID       string
+	ULID       UlidValue
 	UserDetail *UserDetail
 	Version    int
 }
 
 type UserDetail struct {
-	ULID string
-	Name string
-	Age  int
+	ULID UlidValue
+	Name NameValue
+	Age  AgeValue
 }
 
-func NewUser(name string, age int) (*User, error) {
+type NameValue struct {
+	value string
+}
 
-	ulid, err := utils.GenerateULID()
+type AgeValue struct {
+	value int
+}
+
+func NewName(value string) (NameValue, error) {
+	if value == "" {
+		return NameValue{}, ErrEmptyName
+	}
+
+	if len(value) > 255 {
+		return NameValue{}, ErrInvalidName
+	}
+
+	return NameValue{value: value}, nil
+}
+
+func NewAge(value int) (AgeValue, error) {
+	if value < 0 || value > 120 {
+		return AgeValue{}, ErrInvalidAge
+	}
+
+	return AgeValue{value: value}, nil
+}
+
+func NewUser(nameString string, ageInt int) (*User, error) {
+
+	ulid, err := GenerateULID()
+
+	if err != nil {
+		return nil, err
+	}
+
+	name, err := NewName(nameString)
+
+	if err != nil {
+		return nil, err
+	}
+
+	age, err := NewAge(ageInt)
 
 	if err != nil {
 		return nil, err
@@ -31,33 +69,23 @@ func NewUser(name string, age int) (*User, error) {
 		ULID:    ulid,
 		Version: 0,
 		UserDetail: &UserDetail{
-			Name: "",
-			Age:  0,
+			Name: name,
+			Age:  age,
 		},
-	}
-
-	if err := user.SetName(name); err != nil {
-		return nil, err
-	}
-
-	if err := user.SetAge(age); err != nil {
-		return nil, err
 	}
 
 	return user, nil
 }
 
-func (u *User) SetName(name string) error {
-	if name == "" {
-		return ErrEmptyName
+func (u *User) SetName(nameString string) error {
+
+	ulid, err := GenerateULID()
+
+	if err != nil {
+		return err
 	}
 
-	// varchar(255)の制約を満たすために255文字以内に切り捨てる
-	if len(name) > 255 {
-		return ErrEmptyName
-	}
-
-	ulid, err := utils.GenerateULID()
+	name, err := NewName(nameString)
 
 	if err != nil {
 		return err
@@ -73,12 +101,15 @@ func (u *User) SetName(name string) error {
 	return nil
 }
 
-func (u *User) SetAge(age int) error {
-	if age < 0 || age > 120 {
-		return ErrInvalidAge
+func (u *User) SetAge(ageInt int) error {
+
+	ulid, err := GenerateULID()
+
+	if err != nil {
+		return err
 	}
 
-	ulid, err := utils.GenerateULID()
+	age, err := NewAge(ageInt)
 
 	if err != nil {
 		return err
