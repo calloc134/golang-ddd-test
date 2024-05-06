@@ -9,7 +9,7 @@ import (
 // UserAggregate is a struct that represents the User aggregate
 type IUserRepository interface {
 	FindAll(context context.Context) ([]domain.User, error)
-	FindByUlid(context context.Context, uuid string) (*domain.User, error)
+	FindByUlid(context context.Context, ulid domain.UlidValue) (*domain.User, error)
 	Save(context context.Context, user *domain.User) (*domain.User, error)
 }
 
@@ -25,7 +25,20 @@ func (ua *UserApplication) FindAll(context context.Context) ([]domain.User, erro
 	return ua.UserRepository.FindAll(context)
 }
 
-func (ua *UserApplication) NewUser(context context.Context, name string, age int) (*domain.User, error) {
+func (ua *UserApplication) NewUser(context context.Context, nameString string, ageInt int) (*domain.User, error) {
+
+	name, err := domain.NewName(nameString)
+
+	if err != nil {
+		return nil, err
+	}
+
+	age, err := domain.NewAge(ageInt)
+
+	if err != nil {
+		return nil, err
+	}
+
 	user, err := domain.NewUser(name, age)
 
 	if err != nil {
@@ -35,12 +48,32 @@ func (ua *UserApplication) NewUser(context context.Context, name string, age int
 	return ua.UserRepository.Save(context, user)
 }
 
-func (ua *UserApplication) FindByUlid(context context.Context, uuid string) (*domain.User, error) {
-	return ua.UserRepository.FindByUlid(context, uuid)
+func (ua *UserApplication) FindByUlid(context context.Context, ulidString string) (*domain.User, error) {
+
+	ulid, err := domain.NewULID(ulidString)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return ua.UserRepository.FindByUlid(context, ulid)
 }
 
-func (ua *UserApplication) UpdateNameByUlid(context context.Context, uuid string, name string) (*domain.User, error) {
-	user, err := ua.FindByUlid(context, uuid)
+func (ua *UserApplication) UpdateNameByUlid(context context.Context, ulidString string, nameString string) (*domain.User, error) {
+
+	name, err := domain.NewName(nameString)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ulid, err := domain.NewULID(ulidString)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := ua.UserRepository.FindByUlid(context, ulid)
 
 	if err != nil {
 		return nil, err
@@ -53,8 +86,21 @@ func (ua *UserApplication) UpdateNameByUlid(context context.Context, uuid string
 	return ua.UserRepository.Save(context, user)
 }
 
-func (ua *UserApplication) UpdateAgeByUlid(context context.Context, uuid string, age int) (*domain.User, error) {
-	user, err := ua.FindByUlid(context, uuid)
+func (ua *UserApplication) UpdateAgeByUlid(context context.Context, ulidString string, ageInt int) (*domain.User, error) {
+
+	age, err := domain.NewAge(ageInt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ulid, err := domain.NewULID(ulidString)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := ua.UserRepository.FindByUlid(context, ulid)
 
 	if err != nil {
 		return nil, err
