@@ -61,10 +61,17 @@ func NewUser(name NameValue, age AgeValue) (*User, error) {
 		return nil, err
 	}
 
+	userUlid, err := GenerateULID()
+
+	if err != nil {
+		return nil, err
+	}
+
 	user := &User{
 		ULID:    ulid,
 		Version: 0,
 		UserDetail: &UserDetail{
+			ULID: userUlid,
 			Name: name,
 			Age:  age,
 		},

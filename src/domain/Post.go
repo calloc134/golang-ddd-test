@@ -65,11 +65,18 @@ func NewPost(userUlid UlidValue, title TitleValue, content ContentValue) (*Post,
 		return nil, err
 	}
 
+	userUlid, err = NewULID(userUlid.String())
+
+	if err != nil {
+		return nil, err
+	}
+
 	post := &Post{
 		ULID:     ulid,
 		Version:  0,
 		UserULID: userUlid,
 		PostDetail: &PostDetail{
+			ULID:    ulid,
 			Title:   title,
 			Content: content,
 		},
