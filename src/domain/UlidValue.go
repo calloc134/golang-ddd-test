@@ -3,6 +3,7 @@ package domain
 import (
 	"errors"
 	"math/rand"
+	"regexp"
 	"time"
 
 	"github.com/oklog/ulid/v2"
@@ -35,7 +36,10 @@ func NewULID(value string) (UlidValue, error) {
 		return UlidValue{}, ErrEmptyULID
 	}
 
-	if len(value) != 26 {
+	// 正規表現でチェックする
+	regexp := regexp.MustCompile(`^[0-9A-Z]{26}$`)
+
+	if !regexp.MatchString(value) {
 		return UlidValue{}, ErrInvalidULID
 	}
 
