@@ -64,17 +64,18 @@ func (ur UserRepository) FindAll(context context.Context) ([]domain.User, error)
 	return users, nil
 }
 
-func (ur UserRepository) FindByUlid(context context.Context, uuid string) (*domain.User, error) {
+func (ur UserRepository) FindByUlid(context context.Context, ulid domain.UlidValue) (*domain.User, error) {
 
 	userTable := schemas.UserTable{}
 
-	err := ur.db.NewSelect().Model(&userTable).Where("user_ulid = ?", uuid).Relation("UserDetail").Scan(context)
+	err := ur.db.NewSelect().Model(&userTable).Where("user_ulid = ?", ulid.String()).Relation("UserDetail").Scan(context)
 
 	if err != nil {
 		return nil, err
 	}
 
-	ulid, err := domain.NewULID(userTable.UserULID)
+	// ulid変数に再代入してるのも気になるが、同じ値になるはずだが
+	ulid, err = domain.NewULID(userTable.UserULID)
 
 	if err != nil {
 		return nil, err

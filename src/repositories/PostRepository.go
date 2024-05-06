@@ -70,17 +70,17 @@ func (pr PostRepository) FindAll(context context.Context) ([]domain.Post, error)
 	return posts, nil
 }
 
-func (pr PostRepository) FindByUlid(context context.Context, uuid string) (*domain.Post, error) {
+func (pr PostRepository) FindByUlid(context context.Context, ulid domain.UlidValue) (*domain.Post, error) {
 
 	postTable := schemas.PostTable{}
 
-	err := pr.db.NewSelect().Model(&postTable).Where("post_ulid = ?", uuid).Relation("PostDetail").Scan(context)
+	err := pr.db.NewSelect().Model(&postTable).Where("post_ulid = ?", ulid.String()).Relation("PostDetail").Scan(context)
 
 	if err != nil {
 		return nil, err
 	}
 
-	ulid, err := domain.NewULID(postTable.PostULID)
+	ulid, err = domain.NewULID(postTable.PostULID)
 
 	if err != nil {
 		return nil, err
@@ -126,7 +126,7 @@ func (pr PostRepository) Save(context context.Context, post *domain.Post) (*doma
 	defer tx.Rollback()
 
 	var version int
-	versionCheckErr := pr.db.NewSelect().ColumnExpr("version").Model(&schemas.PostTable{}).Where("post_ulid = ?", post.ULID).Scan(context, &version)
+	versionCheckErr := pr.db.NewSelect().ColumnExpr("version").Model(&schemas.PostTable{}).Where("post_ulid = ?", post.ULID.String()).Scan(context, &version)
 
 	// データがあってVersionが一致しない場合はエラー
 	if versionCheckErr != nil && version != post.Version {
