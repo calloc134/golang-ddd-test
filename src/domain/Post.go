@@ -57,25 +57,7 @@ func NewContent(value string) (ContentValue, error) {
 	return ContentValue{value: value}, nil
 }
 
-func NewPost(userUlid UlidValue, title TitleValue, contentString ContentValue) (*Post, error) {
-
-	title, err := NewTitle(titleString)
-
-	if err != nil {
-		return nil, err
-	}
-
-	userUlid, err := NewULID(userUlidString)
-
-	if err != nil {
-		return nil, err
-	}
-
-	content, err := NewContent(contentString)
-
-	if err != nil {
-		return nil, err
-	}
+func NewPost(userUlid UlidValue, title TitleValue, content ContentValue) (*Post, error) {
 
 	ulid, err := GenerateULID()
 
@@ -97,13 +79,6 @@ func NewPost(userUlid UlidValue, title TitleValue, contentString ContentValue) (
 }
 
 func (p *Post) SetTitle(title TitleValue) error {
-
-	title, err := NewTitle(titleString)
-
-	if err != nil {
-		return err
-	}
-
 	ulid, err := GenerateULID()
 
 	if err != nil {
@@ -123,12 +98,6 @@ func (p *Post) SetTitle(title TitleValue) error {
 func (p *Post) SetContent(content ContentValue) error {
 
 	ulid, err := GenerateULID()
-
-	if err != nil {
-		return err
-	}
-
-	content, err := NewContent(contentString)
 
 	if err != nil {
 		return err
