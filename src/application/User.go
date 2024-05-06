@@ -59,7 +59,7 @@ func (ua *UserApplication) FindByUlid(context context.Context, ulidString string
 	return ua.UserRepository.FindByUlid(context, ulid)
 }
 
-func (ua *UserApplication) UpdateNameByUlid(context context.Context, ulidString string, nameString string) (*domain.User, error) {
+func (ua *UserApplication) UpdateNameByUlid(context context.Context, ulidString, nameString string) (*domain.User, error) {
 
 	name, err := domain.NewName(nameString)
 
