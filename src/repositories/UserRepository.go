@@ -117,7 +117,7 @@ func (ur UserRepository) Save(context context.Context, user *domain.User) (*doma
 	// 楽観的ロックの判定
 	// ulidが一致したらversionを取得 versionが一致したらパス
 	var version int
-	versionCheckErr := tx.NewSelect().Model(&schemas.UserTable{}).Column("version").Where("user_ulid = ?", user.ULID).Scan(context, &version)
+	versionCheckErr := tx.NewSelect().Model(&schemas.UserTable{}).Column("version").Where("user_ulid = ?", user.ULID.String()).Scan(context, &version)
 
 	// データがあってversionが一致しない場合はエラー
 	if versionCheckErr != nil && version != user.Version {
