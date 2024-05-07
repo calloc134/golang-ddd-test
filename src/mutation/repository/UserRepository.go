@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/calloc134/golang-ddd-test/cmd/migrate/schemas"
-	"github.com/calloc134/golang-ddd-test/src/application"
-	"github.com/calloc134/golang-ddd-test/src/domain"
+	"github.com/calloc134/golang-ddd-test/src/mutation/application"
+	"github.com/calloc134/golang-ddd-test/src/mutation/domain"
 	"github.com/uptrace/bun"
 )
 
