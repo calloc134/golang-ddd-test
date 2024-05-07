@@ -1,6 +1,6 @@
 package graph
 
-import "github.com/calloc134/golang-ddd-test/src/application"
+import "github.com/calloc134/golang-ddd-test/src/mutation/application"
 
 // This file will not be regenerated automatically.
 //

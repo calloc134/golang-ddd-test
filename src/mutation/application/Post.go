@@ -3,7 +3,7 @@ package application
 import (
 	"context"
 
-	"github.com/calloc134/golang-ddd-test/src/domain"
+	"github.com/calloc134/golang-ddd-test/src/mutation/domain"
 )
 
 type IPostRepository interface {
