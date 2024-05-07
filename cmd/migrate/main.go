@@ -29,7 +29,6 @@ func main() {
 		bundebug.WithEnabled(false),
 		bundebug.FromEnv(""),
 	))
-	
 
 	app := &cli.App{
 		Name: "bun",

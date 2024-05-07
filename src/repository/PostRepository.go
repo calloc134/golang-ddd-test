@@ -161,7 +161,7 @@ func (pr PostRepository) Save(context context.Context, post *domain.Post) (*doma
 		}
 	} else {
 		fmt.Println("update")
-		_, err = tx.NewUpdate().Model(&postTable).Where("version = ?, post_detail_ulid = ?, user_ulid = ?", postTable.Version, postTable.PostDetailULID, postTable.UserULID).Exec(context)
+		_, err = tx.NewUpdate().Model(&postTable).Set("version = ?, post_detail_ulid = ?, user_ulid = ?", postTable.Version, postTable.PostDetailULID, postTable.UserULID).Where("post_ulid = ?", postTable.PostULID).Exec(context)
 
 		if err != nil {
 			return nil, err

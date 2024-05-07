@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/calloc134/golang-ddd-test/cmd/api/graph"
 	"github.com/calloc134/golang-ddd-test/src/application"
-	"github.com/calloc134/golang-ddd-test/src/repositories"
+	repositories "github.com/calloc134/golang-ddd-test/src/repository"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/sqliteshim"
