@@ -7,24 +7,31 @@ DDD の勉強を元に、Go 言語でバックエンドの API を作成して�
 ## ディレクトリ構成
 
 ```
-
-root
+.
 ├── cmd
-│   ├── api
-│   │   ├── graph: graphqlのスキーマとリゾルバ定義
+│   ├── api: API サーバー
+│   │   ├── graph: 具体的なgraphqlサーバ実装
+│   │   │   ├── schema.graphqls: GraphQLのスキーマ
+│   │   │   ├── resolver.go: リゾルバのDIなど
+│   │   │   ├── schema.resolvers.go: スキーマに対応するリゾルバ
+│   │   │   └── model: gqlgenにより生成されたモデル
 │   │   └── main.go: APIのエントリーポイント
-│   └── migrate
+│   └── migrate: マイグレーションツール
 │       ├── migrations: マイグレーションファイル
-│       ├── schemas: DBのスキーマ定義
-│       └── main.go: マイグレーションのエントリーポイント
-└── src
-     ├── domain: ドメイン層
-     ├── application: アプリケーション層
-     └── repositories: リポジトリ層
+│       ├── schemas: DBスキーマ
+│       └── main.go: マイグレーションツールのエントリーポイント
+├── src
+│   ├── mutation: ミューテーションで参照される実装
+│   │   ├── domain: ドメインモデル
+│   │   ├── application: ユースケース
+│   │   └── repository: リポジトリ
+│   └── query: クエリで参照される実装
+│       ├── view: ビューモデル
+│       └── gateway: ゲートウェイ(dataloaderなど)
+├── gqlgen.yml: gqlgen の設定ファイル
+└── test.s3db: 生成されるSQLite3のデータベース(当リポジトリには含まれない)
 
 ```
-
-ディレクトリ構成変えたほうがいいか？わからない
 
 ## 採用技術
 
