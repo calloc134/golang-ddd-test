@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/calloc134/golang-ddd-test/cmd/api/graph"
 	"github.com/calloc134/golang-ddd-test/src/mutation/application"
-	repositories "github.com/calloc134/golang-ddd-test/src/mutation/repository"
+	"github.com/calloc134/golang-ddd-test/src/mutation/repository"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/sqliteshim"
@@ -37,8 +37,8 @@ func main() {
 	}
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: graph.NewResolver(
-		application.NewUserApplication(repositories.NewUserRepository(db)),
-		application.NewPostApplication(repositories.NewPostRepository(db)),
+		application.NewUserApplication(repository.NewUserRepository(db)),
+		application.NewPostApplication(repository.NewPostRepository(db)),
 	)}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
