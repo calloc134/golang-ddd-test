@@ -10,7 +10,7 @@ require (
 	github.com/uptrace/bun/driver/sqliteshim v1.2.1
 	github.com/uptrace/bun/extra/bundebug v1.2.1
 	github.com/urfave/cli/v2 v2.27.1
-	github.com/vektah/gqlparser/v2 v2.5.11
+	github.com/vektah/gqlparser/v2 v2.5.14
 )
 
 require (
